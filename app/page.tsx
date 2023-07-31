@@ -1,10 +1,16 @@
 "use client";
-import { useChat } from "ai/react";
 import Viewer from "./components/viewer";
 import UserChatMessage from "./components/user-chat-message";
 import AIChatMessage from "./components/ai-chat-message";
+import useCustomChat from "./hooks/useChat";
 export default function Chat() {
-  const { messages, input, handleInputChange, handleSubmit } = useChat();
+  const {
+    messages,
+    postCompletion,
+    inputRef,
+    handleInputChange,
+    handleFormSubmit,
+  } = useCustomChat();
 
   return (
     <div className="flex  h-screen">
@@ -12,26 +18,20 @@ export default function Chat() {
         {messages.length > 0
           ? messages.map((m) => {
               if (m.role === "user") {
-                return (
-                  <UserChatMessage
-                    key={m.id}
-                    text={m.content}
-                  ></UserChatMessage>
-                );
+                return <UserChatMessage text={m.content}></UserChatMessage>;
               } else {
-                return (
-                  <AIChatMessage key={m.id} text={m.content}></AIChatMessage>
-                );
+                return <AIChatMessage text={m.content}></AIChatMessage>;
               }
             })
           : null}
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleFormSubmit}>
           <input
             className="fixed w-full max-w-md bottom-0 border bg-transparent border-gray-300 rounded mb-8 shadow-xl p-2"
-            value={input}
+            ref={inputRef}
+            type="text"
             placeholder="Say something..."
-            onChange={handleInputChange}
+            // onChange={handleInputChange}
           />
         </form>
       </div>
