@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Message } from "../types/types";
-import axios from "axios";
+import axios, { Axios } from "axios";
 
 const INTIAL_MESSAGES: Message[] = [];
 const INTIAL_INPUT: string = "";
 
 const testEndPoint = "https://dog-api.kinduff.com/api/facts?number=5";
+const textEndPoint =
+  "https://2dbf-2001-569-7e44-1200-30ac-638a-ca29-1c6e.ngrok-free.app/text";
 
 export default function useChat() {
   const [messages, setMessages] = useState(INTIAL_MESSAGES);
@@ -32,10 +34,16 @@ export default function useChat() {
   }
   async function postCompletion() {
     console.log("postCompletion");
-    const { data } = await axios.get(testEndPoint);
-    setMessages((prevState) => {
-      return [...prevState, { content: data.facts[0], role: "assistant" }];
-    });
+    try {
+      const res = await axios.get(
+        "https://2dbf-2001-569-7e44-1200-30ac-638a-ca29-1c6e.ngrok-free.app/chat?content=hello&role=user"
+      );
+      setMessages((prevState) => {
+        return [...prevState, { content: res.data.message, role: "assistant" }];
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
