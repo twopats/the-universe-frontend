@@ -14,35 +14,34 @@ export default function useChat() {
   function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     sendUserInput();
-    // postCompletion();
+    postCompletion();
     clearInput();
   }
 
   function sendUserInput() {
+    if (!inputRef.current) return;
     setMessages([
       ...messages,
-      { content: inputRef.current!.value, role: "user" },
+      { content: inputRef.current.value, role: "user" },
     ]);
   }
 
   function clearInput() {
-    inputRef.current!.value = "";
+    if (!inputRef.current) return;
+    inputRef.current.value = "";
   }
   async function postCompletion() {
     console.log("postCompletion");
     const { data } = await axios.get(testEndPoint);
-    console.log(data);
-    console.log("messages: ", messages);
-    setMessages([...messages, { content: data.facts[0], role: "assistant" }]);
+    setMessages((prevState) => {
+      return [...prevState, { content: data.facts[0], role: "assistant" }];
+    });
   }
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    inputRef.current!.value = e.target.value;
+    if (!inputRef.current) return;
+    inputRef.current.value = e.target.value;
   }
-
-  useEffect(() => {
-    // if (messages.length > 0) postCompletion();
-  }, []);
 
   return {
     messages,
