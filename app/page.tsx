@@ -1,17 +1,38 @@
 "use client";
+import { useRef, useEffect, useState } from "react";
 import Viewer from "./components/viewer";
 import UserChatMessage from "./components/user-chat-message";
 import AIChatMessage from "./components/ai-chat-message";
 import useCustomChat from "./hooks/useChat";
 
 export default function Chat() {
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+    const [isFirstMessage, setIsFirstMessage] = useState(true);
+
     const {
         messages,
         postCompletion,
         inputRef,
         handleInputChange,
-        handleFormSubmit,
+        handleFormSubmit: originalHandleFormSubmit,
     } = useCustomChat();
+
+    useEffect(() => {
+        audioRef.current = new Audio("/audiocraft.mp3");
+    }, []);
+
+    const handleFormSubmit = async (e) => {
+        e.preventDefault();
+
+        if (isFirstMessage) {
+            setIsFirstMessage(false);
+            if (audioRef.current) {
+                await audioRef.current.play();
+            }
+        }
+
+        originalHandleFormSubmit(e);
+    };
 
     return (
         <div className="flex  h-screen">
@@ -19,9 +40,9 @@ export default function Chat() {
                 {messages.length > 0
                     ? messages.map((m) => {
                         if (m.role === "user") {
-                            return <UserChatMessage text={m.content}></UserChatMessage>;
+                            return <UserChatMessage key={m.id} text={m.content}></UserChatMessage>;
                         } else {
-                            return <AIChatMessage text={m.content}></AIChatMessage>;
+                            return <AIChatMessage key={m.id} text={m.content}></AIChatMessage>;
                         }
                     })
                     : null}
