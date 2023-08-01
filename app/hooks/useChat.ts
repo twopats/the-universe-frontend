@@ -1,12 +1,11 @@
 import React, { useRef, useState } from "react";
 import { Message } from "../types/types";
 import axios from "axios";
+import config from "../config/config";
+
+const { getTextEndPoint } = config;
 
 const INTIAL_MESSAGES: Message[] = [];
-
-const testEndPoint = "http://localhost:8080/api";
-const textEndPoint =
-  "https://2dbf-2001-569-7e44-1200-30ac-638a-ca29-1c6e.ngrok-free.app/text";
 
 export default function useChat() {
   const [messages, setMessages] = useState(INTIAL_MESSAGES);
@@ -30,10 +29,13 @@ export default function useChat() {
   //send request to backend server
   async function postCompletion() {
     console.log("postCompletion");
+    if (!inputRef.current) return;
     try {
-      const res = await axios.get(testEndPoint);
+      const res = await axios.get(getTextEndPoint(), {
+        params: { content: inputRef.current.value },
+      });
       setMessages((prevState) => {
-        return [...prevState, { content: res.data.message, role: "assistant" }];
+        return [...prevState, { content: res.data, role: "assistant" }];
       });
     } catch (error) {
       console.error(error);
