@@ -32,7 +32,7 @@ export default function useChat() {
     if (!inputRef.current) return;
     try {
       const res = await axios.get(getTextEndPoint(), {
-        params: { content: inputRef.current.value },
+        params: { content: inputRef.current.value, role: "user" },
       });
       setMessages((prevState) => {
         return [...prevState, { content: res.data, role: "assistant" }];
