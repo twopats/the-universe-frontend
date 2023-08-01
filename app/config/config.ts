@@ -4,6 +4,7 @@
 // use local if you are running the backend locally on another port
 // checkout the backend repo for more info: https://github.com/Bakobiibizo/eleven_labs_hackathon
 const environment: string = process.env.NODE_ENV;
+console.log("environment", environment);
 
 type Config = {
   backendBaseURL: string;
@@ -15,8 +16,8 @@ type Config = {
 type GetEndPoint = () => string;
 
 const backendBaseURL =
-  environment == "dev"
-    ? "https://1da6-2001-569-7e44-1200-84cf-949c-8475-e33d.ngrok-free.app/"
+  environment == "development"
+    ? "https://optimal-wrongly-oarfish.ngrok-free.app/"
     : "http://127.0.0.1:5000/";
 
 //if the back end changes  endpoint names, update this config
@@ -33,5 +34,6 @@ const config: Config = {
     return `${backendBaseURL}voice`;
   },
 };
+console.log("config", config);
 
 export default config;
