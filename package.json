@@ -9,8 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/cors": "^2.8.13",
     "ai": "2.1.26",
     "axios": "^1.4.0",
+    "cors": "^2.8.5",
     "langchain": "^0.0.103",
     "next": "13.4.4-canary.11",
     "react": "18.2.0",
@@ -26,5 +29,10 @@
     "postcss": "^8.4.23",
     "tailwindcss": "^3.3.2",
     "typescript": "5.1.3"
-  }
+  },
+  "description": "This example shows how to use the [Vercel AI SDK](https://sdk.vercel.ai/docs) with [Next.js](https://nextjs.org/), [LangChain](https://js.langchain.com), and [OpenAI](https://openai.com) to create a ChatGPT-like AI-powered streaming chat bot.",
+  "main": "next.config.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

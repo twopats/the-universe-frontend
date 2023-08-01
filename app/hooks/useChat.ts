@@ -5,7 +5,7 @@ import axios from "axios";
 const INTIAL_MESSAGES: Message[] = [];
 const INTIAL_INPUT: string = "";
 
-const testEndPoint = "https://dog-api.kinduff.com/api/facts?number=5";
+//const testEndPoint = "http://localhost:8080/chat";
 
 export default function useChat() {
   const [messages, setMessages] = useState(INTIAL_MESSAGES);
@@ -30,14 +30,18 @@ export default function useChat() {
     if (!inputRef.current) return;
     inputRef.current.value = "";
   }
+  const message = "this is a test of thingy"
   async function postCompletion() {
-    console.log("postCompletion");
-    const { data } = await axios.get(testEndPoint);
-    setMessages((prevState) => {
-      return [...prevState, { content: data.facts[0], role: "assistant" }];
-    });
+    try{
+        console.log("postCompletion");
+        const { data } = await axios.get(`https://2dbf-2001-569-7e44-1200-30ac-638a-ca29-1c6e.ngrok-free.app/chat?content=${message}&role=user`);
+        setMessages((prevState) => {
+          return [...prevState, { content: data, role: "assistant" }];
+        });
+      }catch(error){
+      console.log(error);
+    }
   }
-
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (!inputRef.current) return;
     inputRef.current.value = e.target.value;
@@ -50,4 +54,4 @@ export default function useChat() {
     handleInputChange,
     handleFormSubmit,
   };
-}
+  }
